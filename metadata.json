@@ -1,0 +1,6 @@
+{
+  "name": "Menighetsplan",
+  "description": "Handlingsportal og CMS for menigheten til å administrere oppgaver, samlinger og dynamisk web-navigasjon.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
