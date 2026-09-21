@@ -341,6 +341,15 @@ export const AdminPagesManager: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            <Link
+              to="/admin/web"
+              className="px-3.5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+              title="Åpne fullskjerms CMS Desktop Workspace"
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>Åpne CMS Workspace (Desktop)</span>
+            </Link>
+
             <button
               type="button"
               id="btn-restore-pages"
@@ -356,7 +365,7 @@ export const AdminPagesManager: React.FC = () => {
               type="button"
               id="btn-create-cms-page"
               onClick={handleOpenCreate}
-              className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl shadow-xs transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Ny side</span>

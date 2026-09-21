@@ -1461,7 +1461,11 @@ export const CmsWorkspacePage: React.FC = () => {
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-indigo-400" />
                 <span>
-                  {selectedBlock ? "Blokkinnstillinger" : "Sideinnstillinger"}
+                  {selectedBlock
+                    ? "Blokkinnstillinger"
+                    : activeMenuItem
+                    ? "Menypunkt-innstillinger"
+                    : "Sideinnstillinger"}
                 </span>
               </span>
 
@@ -1853,6 +1857,133 @@ export const CmsWorkspacePage: React.FC = () => {
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                       <span>Slett denne siden</span>
+                    </button>
+                  </div>
+                </div>
+              ) : activeMenuItem ? (
+                /* MENU ITEM SETTINGS */
+                <div className="space-y-5 animate-in fade-in duration-150">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+                      Synlighet i menyen
+                    </label>
+                    <label
+                      className={`flex items-center gap-2.5 p-2.5 rounded-xl border cursor-pointer transition-colors ${
+                        activeMenuItem.visible
+                          ? "bg-emerald-950/60 border-emerald-600 text-emerald-200"
+                          : "bg-slate-950 border-slate-800 text-slate-400 hover:bg-slate-900"
+                      }`}
+                      onClick={() => handleToggleMenuItemVisibility(activeMenuItem.id)}
+                    >
+                      {activeMenuItem.visible ? (
+                        <Eye className="w-4 h-4 text-emerald-400" />
+                      ) : (
+                        <EyeOff className="w-4 h-4 text-slate-500" />
+                      )}
+                      <div>
+                        <div className="font-bold text-xs text-white">
+                          {activeMenuItem.visible ? "Synlig i menyen" : "Skjult fra menyen"}
+                        </div>
+                        <div className="text-[10px] text-slate-400">
+                          {activeMenuItem.visible
+                            ? "Vises i den offentlige navigasjonslinjen"
+                            : "Vises ikke for vanlige besøkende"}
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+                      Meny-etikett
+                    </label>
+                    <input
+                      type="text"
+                      value={activeMenuItem.label}
+                      onChange={(e) =>
+                        updateWebNavigationItem(activeMenuItem.id, { label: e.target.value })
+                      }
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white text-xs focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+                      Overordnet menypunkt (Parent)
+                    </label>
+                    <select
+                      value={activeMenuItem.parentId || ""}
+                      onChange={(e) =>
+                        updateWebNavigationItem(activeMenuItem.id, {
+                          parentId: e.target.value ? e.target.value : null,
+                        })
+                      }
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="">-- Toppnivå (ingen overordnet) --</option>
+                      {webNavigation
+                        .filter((item) => !item.parentId && item.id !== activeMenuItem.id)
+                        .map((p) => (
+                          <option key={p.id} value={p.id}>
+                            {p.label}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+                      Mål-URL / Lenke
+                    </label>
+                    <input
+                      type="text"
+                      value={activeMenuItem.target || ""}
+                      onChange={(e) =>
+                        updateWebNavigationItem(activeMenuItem.id, { target: e.target.value })
+                      }
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white font-mono text-xs focus:outline-none focus:border-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 mb-1.5 uppercase tracking-wider">
+                      Koble til CMS-side
+                    </label>
+                    <select
+                      value={
+                        webPages.find(
+                          (p) =>
+                            activeMenuItem.target === `/${p.slug}` ||
+                            activeMenuItem.target === p.slug
+                        )?.slug || ""
+                      }
+                      onChange={(e) => {
+                        const s = e.target.value;
+                        if (s) {
+                          updateWebNavigationItem(activeMenuItem.id, { target: `/${s}` });
+                        }
+                      }}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white text-xs focus:outline-none focus:border-indigo-500"
+                    >
+                      <option value="">-- Velg fra opprettede sider --</option>
+                      {webPages.map((p) => (
+                        <option key={p.id} value={p.slug}>
+                          {p.title} (/{p.slug})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleDeleteMenuItem(activeMenuItem.id, activeMenuItem.label)
+                      }
+                      className="w-full py-2 px-3 rounded-xl bg-red-950/40 hover:bg-red-950 border border-red-900/60 text-red-400 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Slett dette menypunktet</span>
                     </button>
                   </div>
                 </div>
